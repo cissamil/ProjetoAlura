@@ -54,7 +54,7 @@ git clone https://github.com/cissamil/ProjetoAlura.git
 cd ProjetoAlura
 ```
 
-2. **Instale dependências **
+2. **Instale dependências**
 ```bash
 npm install
 npm start
