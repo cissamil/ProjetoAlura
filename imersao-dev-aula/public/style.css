@@ -1,0 +1,375 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+:root {
+    --primary-color: #8ab4f8;
+    --secondary-color: #e8eaed;
+    --tertiary-color: #9aa0a6;
+    --bg-color: #202124;
+    --surface-color: #2d2e30;
+    --border-color: #3c4043;
+    --xp-color: #4caf50;
+    --level-color: #ffc107;
+    --delete-color: #f44336;
+    --delete-hover: #d32f2f;
+
+    --status-pendente: #f44336; /* Vermelho */
+    --status-andamento: #4285f4;
+    --status-concluido: #34a853;
+
+    /* Cores de fundo para as tarefas por status */
+    --task-bg-pendente: #442c2e;  /* Vermelho claro/escuro */
+    --task-bg-andamento: #4d3c23; /* Laranja claro/escuro */
+    --task-bg-concluido: #2a4234; /* Verde claro/escuro */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--bg-color);
+    color: var(--secondary-color);
+    font-family: "Quicksand", sans-serif;
+    line-height: 1.6;
+}
+
+/* --- Header e Status do Jogador --- */
+.header {
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    background: var(--bg-color);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.player-stats {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.level-badge {
+    background-color: var(--level-color);
+    color: var(--bg-color);
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.xp-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 200px;
+}
+
+.xp-bar {
+    width: 100%;
+    height: 12px;
+    background-color: var(--surface-color);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.xp-fill {
+    height: 100%;
+    width: 0%;
+    background-color: var(--xp-color);
+    border-radius: 6px;
+    transition: width 0.5s ease-in-out;
+}
+
+.xp-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* --- Seção de Adicionar Tarefa --- */
+.add-task-section {
+    padding: 1.5rem 2rem;
+    background-color: var(--surface-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.add-task-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+
+.add-task-form input,
+.add-task-form select {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--tertiary-color);
+    background: var(--bg-color);
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--secondary-color);
+    transition: all 0.2s ease;
+}
+
+.add-task-form input:focus,
+.add-task-form select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.add-task-form input#taskTitle {
+    flex: 2;
+    min-width: 200px;
+}
+
+.add-task-form input#taskProject {
+    flex: 1;
+    min-width: 150px;
+}
+
+.add-task-form select#taskXp {
+    flex: 1;
+    min-width: 120px;
+}
+
+.add-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.add-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.add-btn:active {
+    transform: scale(0.98);
+}
+
+/* --- Kanban Board --- */
+.kanban-board {
+    display: flex;
+    justify-content: space-around;
+    gap: 1.5rem;
+    padding: 2rem;
+    overflow-x: auto;
+}
+
+.kanban-column {
+    background-color: var(--surface-color);
+    border-radius: 12px;
+    width: 350px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 2px solid;
+    border-radius: 12px 12px 0 0;
+}
+
+.column-header.pendente { border-color: var(--status-pendente); }
+.column-header.andamento { border-color: var(--status-andamento); }
+.column-header.concluido { border-color: var(--status-concluido); }
+
+.column-header h2 {
+    font-size: 1.2rem;
+    margin: 0 0.5rem;
+}
+
+.task-count {
+    background-color: var(--bg-color);
+    padding: 0.2rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.tasks-container {
+    padding: 1rem;
+    flex-grow: 1;
+    overflow-y: auto;
+    min-height: 200px;
+}
+
+/* --- Estilo da Tarefa (Task) --- */
+.task {
+    background-color: var(--task-bg-pendente); /* Cor padrão (pendente) */
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-left: 5px solid;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Cores específicas por coluna */
+.kanban-column[data-status="andamento"] .task { background-color: var(--task-bg-andamento); }
+.kanban-column[data-status="concluido"] .task { background-color: var(--task-bg-concluido); }
+
+.task:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.task-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
+
+.task-project {
+    font-size: 0.8rem;
+    color: var(--tertiary-color);
+    background-color: var(--surface-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    display: inline-block;
+}
+
+.task-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.task-xp {
+    font-weight: 700;
+    color: var(--xp-color);
+}
+
+.task-actions button {
+    background: none;
+    border: none;
+    color: var(--tertiary-color);
+    cursor: pointer;
+    font-size: 1rem;
+    margin-left: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.task-actions button.delete-btn:hover { color: var(--delete-color); }
+.task-actions button.move-btn:hover { color: var(--primary-color); }
+
+/* --- Modal de Level Up --- */
+.modal {
+    position: fixed;
+    z-index: 200;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal:not(.hidden) {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--surface-color);
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.modal:not(.hidden) .modal-content {
+    transform: scale(1);
+}
+
+.modal-content h2 {
+    color: var(--level-color);
+    font-size: 2.5rem;
+}
+
+.level-up-text {
+    font-size: 1.2rem;
+    margin: 1rem 0 2rem;
+}
+
+.level-up-text span {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.modal-btn {
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    transition: opacity 0.2s ease;
+}
+
+.modal-btn:hover {
+    opacity: 0.9;
+}
+
+/* --- Responsividade --- */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    .kanban-board {
+        flex-direction: column;
+        align-items: center;
+    }
+    .kanban-column {
+        width: 90%;
+        max-width: 400px;
+    }
+}

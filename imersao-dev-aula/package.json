@@ -1,0 +1,15 @@
+{
+  "name": "taskquest-kanban",
+  "version": "1.0.0",
+  "description": "Lista de tarefas gamificada em formato Kanban",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["kanban", "tasks", "gamification"],
+  "author": "Clarissa Morita",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

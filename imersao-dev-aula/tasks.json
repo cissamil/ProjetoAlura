@@ -1,0 +1,51 @@
+{
+  "player": {
+    "level": 1,
+    "xp": 0,
+    "maxXp": 100
+  },
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Distribuir as tarefas",
+      "project": "Meu Projeto 1",
+      "status": "pendente",
+      "xp": 20
+    },
+    {
+      "id": 2,
+      "title": "Acompanhar execução",
+      "project": "Meu Projeto 1",
+      "status": "pendente",
+      "xp": 30
+    },
+    {
+      "id": 3,
+      "title": "Criar plano de solução",
+      "project": "Meu Projeto 2",
+      "status": "andamento",
+      "xp": 35
+    },
+    {
+      "id": 4,
+      "title": "Apresentar a solução",
+      "project": "Meu Projeto 2",
+      "status": "andamento",
+      "xp": 50
+    },
+    {
+      "id": 5,
+      "title": "Coletar requisitos",
+      "project": "Meu Projeto 3",
+      "status": "concluido",
+      "xp": 20
+    },
+    {
+      "id": 6,
+      "title": "Estudar alternativas",
+      "project": "Meu Projeto 3",
+      "status": "concluido",
+      "xp": 35
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> AluTask - Kanban Gamificado </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header com Level e XP -->
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fa-solid fa-clipboard-list"></i> AluTask</h1>
+            <div class="player-stats">
+                <div class="level-badge">
+                    Level <span id="level">1</span>
+                </div>
+                <div class="xp-container">
+                    <div class="xp-bar">
+                        <div class="xp-fill" id="xpFill"></div>
+                    </div>
+                    <span class="xp-text"><span id="currentXp">0</span>/<span id="maxXp">100</span> XP</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Formulário para adicionar tarefa -->
+    <section class="add-task-section">
+        <div class="add-task-form">
+            <input type="text" id="taskTitle" placeholder="Nome da tarefa..." maxlength="40">
+            <input type="text" id="taskProject" placeholder="Nome do projeto..." maxlength="30">
+            <select id="taskXp">
+                <option value="20">20 XP (Fácil)</option>
+                <option value="35" selected>35 XP (Média)</option>
+                <option value="50">50 XP (Difícil)</option>
+            </select>
+            <button id="addBtn" class="add-btn"><i class="fa-solid fa-plus"></i> Adicionar Tarefa</button>
+        </div>
+    </section>
+
+    <!-- Kanban Board -->
+    <main class="kanban-board">
+        <!-- Coluna Pendente -->
+        <div class="kanban-column" data-status="pendente">
+            <div class="column-header pendente">
+                <h2>Pendentes</h2>
+                <span class="task-count" id="count-pendente">0</span>
+            </div>
+            <div class="tasks-container" id="pendente-tasks">
+                <!-- Tarefas pendentes aqui -->
+            </div>
+        </div>
+
+        <!-- Coluna Em Andamento -->
+        <div class="kanban-column" data-status="andamento">
+            <div class="column-header andamento">
+                <h2>Em Andamento</h2>
+                <span class="task-count" id="count-andamento">0</span>
+            </div>
+            <div class="tasks-container" id="andamento-tasks">
+                <!-- Tarefas em andamento aqui -->
+            </div>
+        </div>
+
+        <!-- Coluna Concluído -->
+        <div class="kanban-column" data-status="concluido">
+            <div class="column-header concluido">
+                <h2>Concluídas</h2>
+                <span class="task-count" id="count-concluido">0</span>
+            </div>
+            <div class="tasks-container" id="concluido-tasks">
+                <!-- Tarefas concluídas aqui -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Level Up -->
+    <div id="levelUpModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>🎉 LEVEL UP!</h2>
+            <p class="level-up-text">Você alcançou o <span id="newLevel"></span>!</p>
+            <button id="closeModalBtn" class="modal-btn">Continuar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
