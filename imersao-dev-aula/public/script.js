@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Elementos do DOM ---
     const addBtn = document.getElementById('addBtn');
     const taskTitleInput = document.getElementById('taskTitle');
-    const taskProjectInput = document.getElementById('taskProject');
+    const taskDescriptionInput = document.getElementById('taskDescription');
     const taskXpSelect = document.getElementById('taskXp');
 
     const levelEl = document.getElementById('level');
@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const levelUpModal = document.getElementById('levelUpModal');
     const newLevelEl = document.getElementById('newLevel');
     const closeModalBtn = document.getElementById('closeModalBtn');
+    const rankingListEl = document.getElementById('ranking-list');
 
     // --- Estado do Jogo e Tarefas ---
     let player = {
@@ -34,10 +35,28 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     let tasks = [];
+    let totalXp = 0;
+
+    // Ranking simulado 
+    let ranking = [
+        { name: 'Clarissa', xp: 1250 },
+        { name: 'GuilhermeLima', xp: 980 },
+        { name: 'AhirtonLopes', xp: 750 },
+        { name: 'MonicaHillman', xp: 400 },
+        { name: 'AluraJunior', xp: 150 },
+    ];
 
     // --- Funções de Lógica ---
 
     const calculateXpToNextLevel = (level) => 100 * Math.pow(level, 1.5);
+
+    const calculateTotalXp = (level, currentXp) => {
+        let total = currentXp;
+        for (let i = 1; i < level; i++) {
+            total += calculateXpToNextLevel(i);
+        }
+        return total;
+    };
 
     const updatePlayerStats = () => {
         levelEl.textContent = player.level;
@@ -46,6 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const xpPercentage = (player.xp / player.xpToNextLevel) * 100;
         xpFillEl.style.width = `${xpPercentage}%`;
     };
+
+
 
     const showLevelUpModal = (newLevel) => {
         newLevelEl.textContent = `Nível ${newLevel}`;
@@ -61,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showLevelUpModal(player.level);
         }
         updatePlayerStats();
+        updateRanking();
         saveData();
     };
 
@@ -79,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="task-header">
                 <h3 class="task-title">${task.title}</h3>
             </div>
-            <p class="task-project">${task.project}</p>
+            <p class="task-description">${task.description}</p>
             <div class="task-footer">
                 <span class="task-xp" style="color: ${xpColor};">${task.xp} XP</span>
                 <div class="task-actions">
@@ -120,6 +142,31 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCounts();
     };
 
+    const updateRanking = () => {
+        if (!rankingListEl) return;
+
+        totalXp = calculateTotalXp(player.level, player.xp);
+
+        // Adiciona o jogador atual ao ranking para ordenação
+        const fullRanking = [
+            ...ranking,
+            { name: 'Você', xp: totalXp, isCurrentUser: true }
+        ];
+
+        // Ordena por XP (maior para o menor)
+        fullRanking.sort((a, b) => b.xp - a.xp);
+
+        // Renderiza a lista
+        rankingListEl.innerHTML = '';
+        fullRanking.forEach((user, index) => {
+            const item = document.createElement('li');
+            item.classList.add('ranking-item');
+            if (user.isCurrentUser) item.classList.add('current-user');
+            item.innerHTML = `<span class="rank">${index + 1}</span> <span class="name">${user.name}</span> <span class="xp">${Math.floor(user.xp)} XP</span>`;
+            rankingListEl.appendChild(item);
+        });
+    };
+
     const updateCounts = () => {
         const statusCounts = { pendente: 0, andamento: 0, concluido: 0 };
         tasks.forEach(task => statusCounts[task.status]++);
@@ -130,23 +177,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const addTask = () => {
         const title = taskTitleInput.value.trim();
-        const project = taskProjectInput.value.trim();
+        const description = taskDescriptionInput.value.trim();
         if (!title) {
-            alert('Por favor, dê um nome para a tarefa.');
+            alert('Por favor, dê um título para a tarefa.');
             return;
         }
 
         const newTask = {
             id: `task-${Date.now()}`,
             title,
-            project: project || 'Geral',
+            description: description, // Salva a descrição (pode ser vazia)
             xp: taskXpSelect.value,
             status: 'pendente',
         };
 
         tasks.push(newTask);
         taskTitleInput.value = '';
-        taskProjectInput.value = '';
+        taskDescriptionInput.value = '';
         renderTasks();
         saveData();
     };
@@ -184,6 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveData = () => {
         localStorage.setItem('aluTaskPlayer', JSON.stringify(player));
         localStorage.setItem('aluTaskTasks', JSON.stringify(tasks));
+        localStorage.setItem('aluTaskBots', JSON.stringify(ranking)); // Salva o estado dos bots também
     };
 
     const loadData = () => {
@@ -197,8 +245,14 @@ document.addEventListener('DOMContentLoaded', () => {
             tasks = JSON.parse(savedTasks);
         }
 
+        const savedBots = localStorage.getItem('aluTaskBots');
+        if (savedBots) {
+            ranking = JSON.parse(savedBots);
+        }
+
         // Garante que o xpToNextLevel está correto após carregar
         player.xpToNextLevel = calculateXpToNextLevel(player.level);
+        totalXp = calculateTotalXp(player.level, player.xp);
     };
 
     // --- Inicialização e Event Listeners ---
@@ -218,6 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadData();
         updatePlayerStats();
         renderTasks();
+        updateRanking();
     };
 
     init();

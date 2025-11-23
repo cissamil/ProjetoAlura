@@ -10,18 +10,16 @@
 <body>
     <!-- Header com Level e XP -->
     <header class="header">
-        <div class="header-content">
-            <h1><i class="fa-solid fa-clipboard-list"></i> AluTask</h1>
-            <div class="player-stats">
-                <div class="level-badge">
-                    Level <span id="level">1</span>
+        <h1><i class="fa-solid fa-clipboard-list"></i> AluTask</h1>
+        <div class="player-stats">
+            <div class="level-badge">
+                Level <span id="level">1</span>
+            </div>
+            <div class="xp-container">
+                <div class="xp-bar">
+                    <div class="xp-fill" id="xpFill"></div>
                 </div>
-                <div class="xp-container">
-                    <div class="xp-bar">
-                        <div class="xp-fill" id="xpFill"></div>
-                    </div>
-                    <span class="xp-text"><span id="currentXp">0</span>/<span id="maxXp">100</span> XP</span>
-                </div>
+                <span class="xp-text"><span id="currentXp">0</span>/<span id="maxXp">100</span> XP</span>
             </div>
         </div>
     </header>
@@ -29,8 +27,8 @@
     <!-- Formulário para adicionar tarefa -->
     <section class="add-task-section">
         <div class="add-task-form">
-            <input type="text" id="taskTitle" placeholder="Nome da tarefa..." maxlength="40">
-            <input type="text" id="taskProject" placeholder="Nome do projeto..." maxlength="30">
+            <input type="text" id="taskTitle" placeholder="Título..." maxlength="40">
+            <input type="text" id="taskDescription" placeholder="Descrição da tarefa..." maxlength="80">
             <select id="taskXp">
                 <option value="20">20 XP (Fácil)</option>
                 <option value="35" selected>35 XP (Média)</option>
@@ -40,41 +38,51 @@
         </div>
     </section>
 
-    <!-- Kanban Board -->
-    <main class="kanban-board">
-        <!-- Coluna Pendente -->
-        <div class="kanban-column" data-status="pendente">
-            <div class="column-header pendente">
-                <h2>Pendentes</h2>
-                <span class="task-count" id="count-pendente">0</span>
+    <div class="content-wrapper">
+        <!-- Kanban Board -->
+        <main class="kanban-board">
+            <!-- Coluna Pendente -->
+            <div class="kanban-column" data-status="pendente">
+                <div class="column-header pendente">
+                    <h2>Pendentes</h2>
+                    <span class="task-count" id="count-pendente">0</span>
+                </div>
+                <div class="tasks-container" id="pendente-tasks">
+                    <!-- Tarefas pendentes aqui -->
+                </div>
             </div>
-            <div class="tasks-container" id="pendente-tasks">
-                <!-- Tarefas pendentes aqui -->
-            </div>
-        </div>
 
-        <!-- Coluna Em Andamento -->
-        <div class="kanban-column" data-status="andamento">
-            <div class="column-header andamento">
-                <h2>Em Andamento</h2>
-                <span class="task-count" id="count-andamento">0</span>
+            <!-- Coluna Em Andamento -->
+            <div class="kanban-column" data-status="andamento">
+                <div class="column-header andamento">
+                    <h2>Em Andamento</h2>
+                    <span class="task-count" id="count-andamento">0</span>
+                </div>
+                <div class="tasks-container" id="andamento-tasks">
+                    <!-- Tarefas em andamento aqui -->
+                </div>
             </div>
-            <div class="tasks-container" id="andamento-tasks">
-                <!-- Tarefas em andamento aqui -->
-            </div>
-        </div>
 
-        <!-- Coluna Concluído -->
-        <div class="kanban-column" data-status="concluido">
-            <div class="column-header concluido">
-                <h2>Concluídas</h2>
-                <span class="task-count" id="count-concluido">0</span>
+            <!-- Coluna Concluído -->
+            <div class="kanban-column" data-status="concluido">
+                <div class="column-header concluido">
+                    <h2>Concluídas</h2>
+                    <span class="task-count" id="count-concluido">0</span>
+                </div>
+                <div class="tasks-container" id="concluido-tasks">
+                    <!-- Tarefas concluídas aqui -->
+                </div>
             </div>
-            <div class="tasks-container" id="concluido-tasks">
-                <!-- Tarefas concluídas aqui -->
-            </div>
-        </div>
-    </main>
+        </main>
+
+        <!-- Seção de Ranking -->
+        <section class="ranking-section">
+            <h2><i class="fa-solid fa-trophy"></i> Ranking de Pontos</h2>
+            <ol id="ranking-list" class="ranking-list">
+                <!-- Itens do ranking gerados via JS -->
+            </ol>
+        </section>
+    </div>
 
     <!-- Modal Level Up -->
     <div id="levelUpModal" class="modal hidden">

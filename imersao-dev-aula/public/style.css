@@ -40,7 +40,7 @@ body {
     padding: 1rem 2rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-between; /* Garante que os itens fiquem nas extremidades */
     flex-wrap: wrap;
     gap: 1.5rem;
     background: var(--bg-color);
@@ -134,13 +134,13 @@ body {
 }
 
 .add-task-form input#taskTitle {
-    flex: 2;
-    min-width: 200px;
+    flex: 1; /* Diminuído */
+    min-width: 150px;
 }
 
-.add-task-form input#taskProject {
-    flex: 1;
-    min-width: 150px;
+.add-task-form input#taskDescription {
+    flex: 2; /* Aumentado */
+    min-width: 200px;
 }
 
 .add-task-form select#taskXp {
@@ -173,13 +173,19 @@ body {
     transform: scale(0.98);
 }
 
+/* --- Wrapper Principal --- */
+.content-wrapper {
+    display: flex;
+    gap: 1.5rem;
+    padding: 2rem;
+    align-items: flex-start; /* Alinha os itens no topo */
+}
+
 /* --- Kanban Board --- */
 .kanban-board {
     display: flex;
-    justify-content: space-around;
     gap: 1.5rem;
-    padding: 2rem;
-    overflow-x: auto;
+    flex-grow: 1; /* Permite que o kanban ocupe o espaço disponível */
 }
 
 .kanban-column {
@@ -372,4 +378,58 @@ body {
         width: 90%;
         max-width: 400px;
     }
+}
+
+/* --- Seção de Ranking --- */
+.ranking-section {
+    padding: 1.5rem;
+    background-color: var(--surface-color);
+    border-radius: 12px;
+    width: 350px; /* Largura similar a uma coluna do kanban */
+    flex-shrink: 0; /* Impede que o ranking encolha */
+}
+
+.ranking-section h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.ranking-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    background-color: var(--bg-color);
+    transition: background-color 0.2s;
+}
+
+.ranking-item.current-user {
+    background-color: #3c4a64; /* Destaque para o usuário atual */
+    border: 1px solid var(--primary-color);
+}
+
+.ranking-item .rank {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--tertiary-color);
+    width: 40px;
+}
+
+.ranking-item .name {
+    font-weight: 600;
+    flex-grow: 1;
+}
+
+.ranking-item .xp {
+    font-weight: 700;
+    color: var(--xp-color);
 }
