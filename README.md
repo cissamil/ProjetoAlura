@@ -67,7 +67,7 @@ Este projeto foi desenvolvido como parte da Imersão Dev Alura com Google e est�
 
 ## 👤 Autor
 
-**Clarissa**
+**Clarissa Eri Morita**
 
 - GitHub: [@cissamil](https://github.com/cissamil)
 
