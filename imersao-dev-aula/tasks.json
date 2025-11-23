@@ -1,49 +1,49 @@
 {
   "player": {
     "level": 1,
-    "xp": 0,
+    "xp": 70,
     "maxXp": 100
   },
   "tasks": [
     {
       "id": 1,
-      "title": "Distribuir as tarefas",
-      "project": "Meu Projeto 1",
-      "status": "pendente",
+      "title": "Projeto Alura 1",
+      "project": "Fazer o Frontend",
+      "status": "concluido",
       "xp": 20
     },
     {
       "id": 2,
-      "title": "Acompanhar execução",
-      "project": "Meu Projeto 1",
-      "status": "pendente",
+      "title": "Projeto alura 2",
+      "project": "Estilizar com ajuda do Gemini",
+      "status": "andamento",
       "xp": 30
     },
     {
       "id": 3,
-      "title": "Criar plano de solução",
-      "project": "Meu Projeto 2",
-      "status": "andamento",
+      "title": "Criar projeto Alura",
+      "project": "Utilidade, criativo e intuitivo",
+      "status": "concluido",
       "xp": 35
     },
     {
       "id": 4,
-      "title": "Apresentar a solução",
-      "project": "Meu Projeto 2",
-      "status": "andamento",
+      "title": "Prototipo ALura",
+      "project": "Fazer no figma a tela",
+      "status": "pendente",
       "xp": 50
     },
     {
       "id": 5,
-      "title": "Coletar requisitos",
-      "project": "Meu Projeto 3",
+      "title": "Criar repositorio",
+      "project": "GitHub",
       "status": "concluido",
       "xp": 20
     },
     {
       "id": 6,
-      "title": "Estudar alternativas",
-      "project": "Meu Projeto 3",
+      "title": "Estudar sobre Node.js",
+      "project": "Assistir video 4 da imersao",
       "status": "concluido",
       "xp": 35
     }

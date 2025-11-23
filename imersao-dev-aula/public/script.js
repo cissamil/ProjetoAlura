@@ -27,17 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalBtn = document.getElementById('closeModalBtn');
     const rankingListEl = document.getElementById('ranking-list');
 
-    // --- Estado do Jogo e Tarefas ---
-    let player = {
-        level: 1,
-        xp: 0,
-        xpToNextLevel: 100,
-    };
-
+    // --- Estado Local ---
+    let player = {};
     let tasks = [];
-    let totalXp = 0;
-
-    // Ranking simulado 
+    
+    // Ranking simulado (pode ser substituído por uma chamada de API no futuro)
     let ranking = [
         { name: 'Clarissa', xp: 1250 },
         { name: 'GuilhermeLima', xp: 980 },
@@ -58,32 +52,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return total;
     };
 
-    const updatePlayerStats = () => {
+    const updatePlayerStats = (playerData) => {
+        player = playerData;
         levelEl.textContent = player.level;
         currentXpEl.textContent = Math.floor(player.xp);
-        maxXpEl.textContent = Math.floor(player.xpToNextLevel);
-        const xpPercentage = (player.xp / player.xpToNextLevel) * 100;
+        maxXpEl.textContent = Math.floor(player.maxXp); // Usando maxXp do servidor
+        const xpPercentage = (player.xp / player.maxXp) * 100;
         xpFillEl.style.width = `${xpPercentage}%`;
+        updateRanking();
     };
-
-
 
     const showLevelUpModal = (newLevel) => {
         newLevelEl.textContent = `Nível ${newLevel}`;
         levelUpModal.classList.remove('hidden');
-    };
-
-    const addXp = (amount) => {
-        player.xp += amount;
-        while (player.xp >= player.xpToNextLevel) {
-            player.xp -= player.xpToNextLevel;
-            player.level++;
-            player.xpToNextLevel = calculateXpToNextLevel(player.level);
-            showLevelUpModal(player.level);
-        }
-        updatePlayerStats();
-        updateRanking();
-        saveData();
     };
 
     const createTaskElement = (task) => {
@@ -92,18 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
         taskEl.dataset.id = task.id;
         taskEl.style.borderColor = getStatusColor(task.status);
 
-        const xpValue = parseInt(task.xp);
-        let xpColor = 'var(--xp-color)';
-        if (xpValue === 35) xpColor = 'var(--status-pendente)';
-        if (xpValue === 50) xpColor = 'var(--delete-color)';
-
         taskEl.innerHTML = `
             <div class="task-header">
                 <h3 class="task-title">${task.title}</h3>
             </div>
-            <p class="task-description">${task.description}</p>
+            <p class="task-description">${task.project || ''}</p>
             <div class="task-footer">
-                <span class="task-xp" style="color: ${xpColor};">${task.xp} XP</span>
+                <span class="task-xp">${task.xp} XP</span>
                 <div class="task-actions">
                     ${task.status !== 'pendente' ? `<button class="move-btn" data-action="move-prev"><i class="fa-solid fa-chevron-left"></i></button>` : ''}
                     <button class="delete-btn" data-action="delete"><i class="fa-solid fa-trash-can"></i></button>
@@ -145,12 +121,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateRanking = () => {
         if (!rankingListEl) return;
 
-        totalXp = calculateTotalXp(player.level, player.xp);
+        const totalXp = calculateTotalXp(player.level, player.xp);
 
         // Adiciona o jogador atual ao ranking para ordenação
         const fullRanking = [
             ...ranking,
-            { name: 'Você', xp: totalXp, isCurrentUser: true }
+            { name: 'Você', xp: totalXp, isCurrentUser: true } // O nome pode ser editável no futuro
         ];
 
         // Ordena por XP (maior para o menor)
@@ -175,84 +151,85 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const addTask = () => {
+    const addTask = async () => {
         const title = taskTitleInput.value.trim();
-        const description = taskDescriptionInput.value.trim();
+        const project = taskDescriptionInput.value.trim();
+        const xp = parseInt(taskXpSelect.value);
+
         if (!title) {
             alert('Por favor, dê um título para a tarefa.');
             return;
         }
 
-        const newTask = {
-            id: `task-${Date.now()}`,
-            title,
-            description: description, // Salva a descrição (pode ser vazia)
-            xp: taskXpSelect.value,
-            status: 'pendente',
-        };
+        const response = await fetch('/api/tasks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, project, xp })
+        });
 
+        const newTask = await response.json();
         tasks.push(newTask);
+        renderTasks();
+
         taskTitleInput.value = '';
         taskDescriptionInput.value = '';
-        renderTasks();
-        saveData();
     };
 
-    const deleteTask = (taskId) => {
-        tasks = tasks.filter(task => task.id !== taskId);
+    const deleteTask = async (taskId) => {
+        await fetch(`/api/tasks/${taskId}`, { method: 'DELETE' });
+        tasks = tasks.filter(t => t.id !== taskId);
         renderTasks();
-        saveData();
     };
 
-    const moveTask = (taskId, direction) => {
+    const moveTask = async (taskId, direction) => {
         const task = tasks.find(t => t.id === taskId);
         if (!task) return;
 
         const statuses = ['pendente', 'andamento', 'concluido'];
         const currentIndex = statuses.indexOf(task.status);
+        const oldLevel = player.level;
         const newIndex = currentIndex + direction;
 
         if (newIndex >= 0 && newIndex < statuses.length) {
-            const oldStatus = task.status;
-            task.status = statuses[newIndex];
+            const newStatus = statuses[newIndex];
 
-            // Adicionar XP se a tarefa for movida para "Concluído"
-            if (task.status === 'concluido' && oldStatus !== 'concluido') {
-                addXp(parseInt(task.xp));
-            }
+            const response = await fetch(`/api/tasks/${taskId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            });
 
+            const { task: updatedTask, player: updatedPlayer } = await response.json();
+
+            // Atualiza a tarefa localmente
+            task.status = updatedTask.status;
+
+            // Atualiza os dados do jogador e renderiza tudo
+            updatePlayerStats(updatedPlayer);
             renderTasks();
-            saveData();
+
+            // Verifica se houve level up para mostrar o modal
+            if (updatedPlayer.level > oldLevel) {
+                showLevelUpModal(updatedPlayer.level);
+            }
         }
     };
 
-    // --- Persistência de Dados (LocalStorage) ---
+    // --- Carregamento Inicial ---
 
-    const saveData = () => {
-        localStorage.setItem('aluTaskPlayer', JSON.stringify(player));
-        localStorage.setItem('aluTaskTasks', JSON.stringify(tasks));
-        localStorage.setItem('aluTaskBots', JSON.stringify(ranking)); // Salva o estado dos bots também
-    };
-
-    const loadData = () => {
-        const savedPlayer = localStorage.getItem('aluTaskPlayer');
-        if (savedPlayer) {
-            player = JSON.parse(savedPlayer);
+    const loadData = async () => {
+        try {
+            const response = await fetch('/api/tasks');
+            if (!response.ok) throw new Error('Não foi possível carregar os dados.');
+            
+            const data = await response.json();
+            tasks = data.tasks;
+            updatePlayerStats(data.player);
+            renderTasks();
+        } catch (error) {
+            console.error("Erro ao carregar dados:", error);
+            alert("Não foi possível conectar ao servidor. Verifique se ele está rodando.");
         }
-
-        const savedTasks = localStorage.getItem('aluTaskTasks');
-        if (savedTasks) {
-            tasks = JSON.parse(savedTasks);
-        }
-
-        const savedBots = localStorage.getItem('aluTaskBots');
-        if (savedBots) {
-            ranking = JSON.parse(savedBots);
-        }
-
-        // Garante que o xpToNextLevel está correto após carregar
-        player.xpToNextLevel = calculateXpToNextLevel(player.level);
-        totalXp = calculateTotalXp(player.level, player.xp);
     };
 
     // --- Inicialização e Event Listeners ---
@@ -270,9 +247,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const init = () => {
         loadData();
-        updatePlayerStats();
-        renderTasks();
-        updateRanking();
     };
 
     init();

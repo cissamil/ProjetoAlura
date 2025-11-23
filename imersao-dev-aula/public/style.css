@@ -281,7 +281,7 @@ body {
 
 .task-xp {
     font-weight: 700;
-    color: var(--xp-color);
+    color: var(--secondary-color); /* Cor branca padrão */
 }
 
 .task-actions button {
