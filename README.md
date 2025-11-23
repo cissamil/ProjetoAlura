@@ -46,6 +46,21 @@ O sistema oferece diferentes níveis de dificuldade para as tarefas:
 
 Ao acumular pontos, você progride através dos níveis, incentivando a conclusão consistente de tarefas.
 
+## 💻 Como Usar
+
+1. **Clone o repositório**
+```bash
+git clone https://github.com/cissamil/ProjetoAlura.git
+cd ProjetoAlura
+```
+
+2. **Instale dependências **
+```bash
+npm install
+npm start
+http://localhost:3000/
+```
+
 ## 📝 Licença
 
 Este projeto foi desenvolvido como parte da Imersão Dev Alura com Google e está disponível para fins educacionais.
