@@ -51,7 +51,7 @@ Ao acumular pontos, você progride através dos níveis, incentivando a conclus�
 1. **Clone o repositório**
 ```bash
 git clone https://github.com/cissamil/ProjetoAlura.git
-cd ProjetoAlura
+cd imersao-dev-aula
 ```
 
 2. **Instale dependências**
